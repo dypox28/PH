@@ -1,597 +1,459 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حاسبة المعدل - صيدلة سنة ثانية</title>
-    <style>
-        :root{
-            --bg1:#cddfe8;
-            --bg2:#b8cee0;
-            --card:#ffffffef;
-            --header:#1e4a6e;
-            --text:#102030;
-            --muted:#5f7369;
-            --panel:#f7fafd;
-            --module:#ffffff;
-            --border:#dce5ec;
-            --input:#ffffff;
-            --input-text:#102030;
-            --pill:#eef2f7;
-            --accent:#2c7f6b;
-            --accent-dark:#1e5f4f;
-            --target:#eef3f0;
-            --info:#fff4e0;
-            --info-border:#e9b13b;
-            --footer:#e2edf0;
-        }
-        body.dark{
-            --bg1:#07111f;
-            --bg2:#111827;
-            --card:#0f172af2;
-            --header:#07111f;
-            --text:#f8fafc;
-            --muted:#cbd5e1;
-            --panel:#111827;
-            --module:#1e293b;
-            --border:#334155;
-            --input:#0f172a;
-            --input-text:#f8fafc;
-            --pill:#334155;
-            --accent:#34d399;
-            --accent-dark:#10b981;
-            --target:#172033;
-            --info:#1f2937;
-            --info-border:#f59e0b;
-            --footer:#0f172a;
-        }
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: system-ui, 'Segoe UI', 'Tahoma', sans-serif;
-        }
-        body {
-            background: linear-gradient(145deg, var(--bg1), var(--bg2)); color:var(--text);
-            padding: 1rem;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
-        }
-        .card {
-            max-width: 1300px;
-            width: 100%;
-            background: var(--card); color:var(--text);
-            border-radius: 2rem;
-            box-shadow: 0 25px 40px rgba(0,0,0,0.2);
-            overflow: hidden;
-        }
-        .header {
-            background: var(--header);
-            padding: 1.3rem 1.8rem;
-            color: white;
-        }
-        .header h1 {
-            font-size: 1.7rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .flex-dashboard {
-            display: flex;
-            flex-wrap: wrap;
-        }
-        .inputs-side {
-            flex: 2;
-            padding: 1.6rem;
-            background: var(--module);
-            border-left: 1px solid var(--border);
-        }
-        .results-side {
-            flex: 1.2;
-            padding: 1.6rem;
-            background: var(--panel);
-        }
-        .module {
-            background: var(--module);
-            border: 1px solid var(--border);
-            border-radius: 1.2rem;
-            margin-bottom: 1.2rem;
-            padding: 0.8rem 1rem;
-            transition: 0.1s;
-        }
-        .module-title {
-            font-weight: 700;
-            font-size: 1rem;
-            margin-bottom: 10px;
-            border-right: 5px solid var(--accent);
-            padding-right: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .coeff {
-            background: var(--pill);
-            padding: 2px 12px;
-            border-radius: 20px;
-            font-size: 0.7rem;
-            font-weight: normal;
-        }
-        .exam-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-top: 6px;
-        }
-        .field {
-            flex: 1;
-            min-width: 90px;
-        }
-        .field label {
-            font-size: 0.7rem;
-            font-weight: 600;
-            color: var(--accent-dark);
-            display: block;
-        }
-        .field input {
-            width: 100%;
-            padding: 8px 6px;
-            border-radius: 14px;
-            border: 1px solid var(--border);
-            background: var(--input);
-            color: var(--input-text);
-            text-align: center;
-            font-size: 0.85rem;
-        }
-        .field input:focus {
-            outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 2px rgba(44,127,107,0.2);
-        }
-        .formula-note {
-            font-size: 0.65rem;
-            color: var(--muted);
-            margin-top: 6px;
-        }
-        .avg-panel {
-            background: var(--module);
-            border-radius: 1.2rem;
-            padding: 1.2rem;
-            text-align: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            margin-bottom: 1.4rem;
-        }
-        .big-avg {
-            font-size: 3rem;
-            font-weight: 800;
-            color: var(--accent-dark);
-            line-height: 1;
-        }
-        .target-panel {
-            background: var(--target);
-            border-radius: 1.2rem;
-            padding: 1.2rem;
-        }
-        .target-panel h3 {
-            font-size: 1rem;
-            text-align: center;
-            margin-bottom: 12px;
-        }
-        .target-line {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            margin: 12px 0;
-        }
-        .target-line input {
-            width: 90px;
-            padding: 8px;
-            border-radius: 40px;
-            border: 1px solid var(--border);
-            background: var(--input);
-            color: var(--input-text);
-            text-align: center;
-            font-weight: bold;
-        }
-        button {
-            background: var(--accent);
-            border: none;
-            padding: 8px 18px;
-            border-radius: 40px;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 10px;
-            transition: 0.2s;
-        }
-        button:hover {
-            background: var(--accent-dark);
-            transform: scale(0.97);
-        }
-        .info-box {
-            background: var(--info);
-            border-right: 4px solid var(--info-border);
-            padding: 10px;
-            border-radius: 18px;
-            margin-top: 15px;
-            font-size: 0.85rem;
-        }
-        hr {
-            margin: 10px 0;
-        }
-        @media (max-width: 750px) {
-            .flex-dashboard {
-                flex-direction: column;
-            }
-            .inputs-side {
-                border-left: none;
-                border-bottom: 1px solid #ddd;
-            }
-        }
-        footer {
-            text-align: center;
-            background: var(--footer);
-            padding: 12px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            color: var(--text);
-        }
-        .theme-btn{
-            float:left;
-            width:auto;
-            padding:8px 14px;
-            background:rgba(255,255,255,.95);
-            color:#111827;
-            border-radius:40px;
-            margin-top:0;
-        }
-        body.dark .theme-btn{
-            background:#334155;
-            color:#f8fafc;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>حاسبة المعدل - صيدلة سنة ثانية</title>
+  <style>
+    :root{
+      --bg1:#cddfe8;
+      --bg2:#b8cee0;
+      --card:#ffffffee;
+      --header:#1e4a6e;
+      --text:#102030;
+      --muted:#52636f;
+      --panel:#f7fafd;
+      --module:#ffffff;
+      --border:#dce5ec;
+      --input:#ffffff;
+      --input-text:#102030;
+      --pill:#eef2f7;
+      --accent:#2c7f6b;
+      --accent-dark:#1e5f4f;
+      --target:#eef3f0;
+      --info:#fff4e0;
+      --info-border:#e9b13b;
+      --footer:#e2edf0;
+      --shadow:rgba(0,0,0,0.18);
+    }
+
+    body.dark{
+      --bg1:#020617;
+      --bg2:#0f172a;
+      --card:#111827f5;
+      --header:#0b1220;
+      --text:#f8fafc;
+      --muted:#d1d5db;
+      --panel:#0f172a;
+      --module:#1e293b;
+      --border:#475569;
+      --input:#020617;
+      --input-text:#f8fafc;
+      --pill:#334155;
+      --accent:#34d399;
+      --accent-dark:#10b981;
+      --target:#162033;
+      --info:#1f2937;
+      --info-border:#f59e0b;
+      --footer:#0b1220;
+      --shadow:rgba(0,0,0,0.45);
+    }
+
+    *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,'Segoe UI','Tahoma',sans-serif;}
+    body{
+      background:linear-gradient(145deg,var(--bg1),var(--bg2));
+      color:var(--text);
+      padding:1rem;
+      display:flex;
+      justify-content:center;
+      align-items:flex-start;
+      min-height:100vh;
+      transition:background .25s,color .25s;
+    }
+    .card{
+      max-width:1300px;
+      width:100%;
+      background:var(--card);
+      border-radius:2rem;
+      box-shadow:0 25px 40px var(--shadow);
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.08);
+    }
+    .header{
+      background:var(--header);
+      padding:1.3rem 1.8rem;
+      color:white;
+      display:flex;
+      gap:1rem;
+      justify-content:space-between;
+      align-items:flex-start;
+      flex-wrap:wrap;
+    }
+    .header h1{font-size:1.7rem;display:flex;align-items:center;gap:10px;}
+    .header p{color:#e5eef7;line-height:1.7;margin-top:.3rem;}
+    .theme-btn{
+      width:auto;
+      margin:0;
+      background:rgba(255,255,255,.15);
+      border:1px solid rgba(255,255,255,.25);
+      padding:9px 14px;
+      white-space:nowrap;
+    }
+    .flex-dashboard{display:flex;flex-wrap:wrap;}
+    .inputs-side{flex:2;padding:1.6rem;background:var(--module);border-left:1px solid var(--border);}
+    .results-side{flex:1.2;padding:1.6rem;background:var(--panel);}
+    .module{
+      background:var(--module);
+      border:1px solid var(--border);
+      border-radius:1.2rem;
+      margin-bottom:1.2rem;
+      padding:.8rem 1rem;
+      box-shadow:0 3px 10px rgba(0,0,0,.03);
+    }
+    .module-title{
+      font-weight:800;
+      font-size:1rem;
+      margin-bottom:10px;
+      border-right:5px solid var(--accent);
+      padding-right:12px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      color:var(--text);
+    }
+    .coeff{background:var(--pill);padding:3px 12px;border-radius:20px;font-size:.7rem;font-weight:700;color:var(--text);}
+    .exam-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:6px;}
+    .field{flex:1;min-width:90px;}
+    .field label{font-size:.72rem;font-weight:700;color:var(--muted);display:block;margin-bottom:4px;}
+    .field input,.target-line input{
+      width:100%;
+      padding:9px 7px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      text-align:center;
+      font-size:.95rem;
+      background:var(--input);
+      color:var(--input-text);
+      caret-color:var(--accent);
+    }
+    .field input::placeholder,.target-line input::placeholder{color:#94a3b8;}
+    .field input:focus,.target-line input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 2px rgba(44,127,107,.22);}
+    .formula-note{font-size:.68rem;color:var(--muted);margin-top:6px;line-height:1.6;}
+    .avg-panel{background:var(--module);border-radius:1.2rem;padding:1.2rem;text-align:center;box-shadow:0 4px 12px rgba(0,0,0,.05);margin-bottom:1.4rem;border:1px solid var(--border);}
+    .big-avg{font-size:3rem;font-weight:900;color:var(--accent);line-height:1;margin:8px 0;}
+    .target-panel{background:var(--target);border-radius:1.2rem;padding:1.2rem;border:1px solid var(--border);}
+    .target-panel h3{font-size:1rem;text-align:center;margin-bottom:12px;line-height:1.7;}
+    .target-line{display:flex;justify-content:center;align-items:center;gap:10px;margin:12px 0;}
+    .target-line input{width:90px;border-radius:40px;font-weight:800;}
+    button{background:var(--accent);border:none;padding:9px 18px;border-radius:40px;color:white;font-weight:800;cursor:pointer;width:100%;margin-top:10px;transition:.2s;}
+    button:hover{background:var(--accent-dark);transform:scale(.985);}
+    .info-box{background:var(--info);border-right:4px solid var(--info-border);padding:12px;border-radius:18px;margin-top:15px;font-size:.88rem;line-height:1.8;color:var(--text);}
+    .reset-btn{background:#4a6275;}
+    .reset-btn:hover{background:#33485a;}
+    footer{text-align:center;background:var(--footer);padding:12px;font-size:.82rem;color:var(--text);font-weight:700;}
+    @media (max-width:750px){
+      body{padding:.5rem;}
+      .card{border-radius:1.3rem;}
+      .flex-dashboard{flex-direction:column;}
+      .inputs-side{border-left:none;border-bottom:1px solid var(--border);padding:1rem;}
+      .results-side{padding:1rem;}
+      .header{padding:1rem;}
+      .header h1{font-size:1.25rem;}
+      .big-avg{font-size:2.4rem;}
+    }
+  </style>
 </head>
 <body>
-<div class="card">
-    <div class="header"><button id="themeToggle" class="theme-btn">🌓 الوضع</button>
+  <div class="card">
+    <div class="header">
+      <div>
         <h1>📊 حاسبة المعدل – السنة الثانية صيدلة</h1>
-        <p>الحاسبة تقدّم نتائج تقريبية مبنية على المعطيات المدخلة وطريقة حساب منطقية، وقد تختلف قليلًا عن النتائج الرسمية، لكنها تمنحك تقديرًا واضحًا وقريبًا لما تحتاجه لتحقيق المعدل المطلوب.</p>
+        <p>أدخل العلامات المتوفرة، واترك الخانات التي لم تُمتحن فيها فارغة. الحاسبة تعطيك المعدل الحالي وما تحتاجه تقريبًا للوصول إلى الهدف.</p>
+      </div>
+      <button class="theme-btn" id="themeBtn" type="button">🌙 الوضع الأسود</button>
     </div>
+
     <div class="flex-dashboard">
-        <!-- الجانب الأيسر: إدخال البيانات -->
-        <div class="inputs-side">
-            <!-- الإنجليزية -->
-            <div class="module">
-                <div class="module-title">الإنجليزية <span class="coeff">معامل 1</span></div>
-                <div class="field"><label>العلامة</label><input type="number" step="any" id="angNote" placeholder="0"></div>
-            </div>
-
-            <!-- البوتانيك -->
-            <div class="module">
-                <div class="module-title">البوتانيك <span class="coeff">معامل 2</span></div>
-                <div class="exam-row">
-                    <div class="field"><label>EMD 1</label><input type="number" step="any" id="bota1" placeholder="0"></div>
-                    <div class="field"><label>EMD 2</label><input type="number" step="any" id="bota2" placeholder="0"></div>
-                    <div class="field"><label>TP</label><input type="number" step="any" id="botaTp" placeholder="0"></div>
-                </div>
-                <div class="formula-note">📐 0.8×(متوسط EMD1+EMD2) + 0.2×TP</div>
-            </div>
-
-            <!-- المينيرال -->
-            <div class="module">
-                <div class="module-title">المينيرال <span class="coeff">معامل 2</span></div>
-                <div class="exam-row">
-                    <div class="field"><label>EMD 1</label><input type="number" step="any" id="min1" placeholder="0"></div>
-                    <div class="field"><label>EMD 2</label><input type="number" step="any" id="min2" placeholder="0"></div>
-                    <div class="field"><label>TP</label><input type="number" step="any" id="minTp" placeholder="0"></div>
-                </div>
-                <div class="formula-note">📐 0.8×(متوسط EMD1+EMD2) + 0.2×TP</div>
-            </div>
-
-            <!-- الجينيتيك (امتحانين) -->
-            <div class="module">
-                <div class="module-title">الجينيتيك <span class="coeff">معامل 2 (امتحانين)</span></div>
-                <div class="exam-row">
-                    <div class="field"><label>امتحان 1</label><input type="number" step="any" id="gen1" placeholder="0"></div>
-                    <div class="field"><label>امتحان 2</label><input type="number" step="any" id="gen2" placeholder="0"></div>
-                </div>
-                <div class="formula-note">المعدل = (Exam1 + Exam2)/2</div>
-            </div>
-
-            <!-- البيوشيمي (ثلاثة امتحانات) -->
-            <div class="module">
-                <div class="module-title">البيوشيمي <span class="coeff">معامل 2 (3 امتحانات)</span></div>
-                <div class="exam-row">
-                    <div class="field"><label>امتحان 1</label><input type="number" step="any" id="bio1" placeholder="0"></div>
-                    <div class="field"><label>امتحان 2</label><input type="number" step="any" id="bio2" placeholder="0"></div>
-                    <div class="field"><label>امتحان 3</label><input type="number" step="any" id="bio3" placeholder="0"></div>
-                </div>
-                <div class="formula-note">المعدل = (Exam1+Exam2+Exam3)/3</div>
-            </div>
-
-            <!-- التحليلية: زوج EMD + TP -->
-            <div class="module">
-                <div class="module-title">التحليلية (Analytique) <span class="coeff">معامل 2</span></div>
-                <div class="exam-row">
-                    <div class="field"><label>EMD 1</label><input type="number" step="any" id="ana1" placeholder="0"></div>
-                    <div class="field"><label>EMD 2</label><input type="number" step="any" id="ana2" placeholder="0"></div>
-                    <div class="field"><label>TP</label><input type="number" step="any" id="anaTp" placeholder="0"></div>
-                </div>
-                <div class="formula-note">📐 0.8×(متوسط EMD1+EMD2) + 0.2×TP</div>
-            </div>
-
-            <!-- الفيزيو باتولوجي (امتحانين) -->
-            <div class="module">
-                <div class="module-title">الفيزيو باتولوجي <span class="coeff">معامل 2 (امتحانين)</span></div>
-                <div class="exam-row">
-                    <div class="field"><label>امتحان 1</label><input type="number" step="any" id="physio1" placeholder="0"></div>
-                    <div class="field"><label>امتحان 2</label><input type="number" step="any" id="physio2" placeholder="0"></div>
-                </div>
-                <div class="formula-note">المعدل = (Exam1+Exam2)/2</div>
-            </div>
-
-            <!-- البيوفيزيك (امتحانين) -->
-            <div class="module">
-                <div class="module-title">البيوفيزيك <span class="coeff">معامل 2 (امتحانين)</span></div>
-                <div class="exam-row">
-                    <div class="field"><label>امتحان 1</label><input type="number" step="any" id="biof1" placeholder="0"></div>
-                    <div class="field"><label>امتحان 2</label><input type="number" step="any" id="biof2" placeholder="0"></div>
-                </div>
-                <div class="formula-note">المعدل = (Exam1+Exam2)/2</div>
-            </div>
-            <button id="resetBtn" style="background:#4a6275;">⟳ إعادة ضبط (جميع الحقول إلى 0)</button>
+      <div class="inputs-side">
+        <div class="module">
+          <div class="module-title">الإنجليزية <span class="coeff">معامل 1</span></div>
+          <div class="field"><label>العلامة</label><input inputmode="decimal" id="angNote" placeholder="مثال: 12.5"></div>
         </div>
 
-        <!-- الجانب الأيمن: النتائج والهدف -->
-        <div class="results-side">
-            <div class="avg-panel">
-                <div>📈 المعدل العام الحالي</div>
-                <div class="big-avg" id="currentAvgSpan">0.00</div>
-                <div class="formula-note">الخانة الفارغة تُحسب 0 في المعدل، وتُعتبر متبقية في حساب الهدف</div>
-                <button id="refreshAvg">تحديث المعدل</button>
-            </div>
-
-            <div class="target-panel">
-                <h3>🎯 شحال خاصك باه تطلع العام ؟ تقدر تبدل الهدف من عشرة لواش تحب </h3>
-                <div class="target-line">
-                    <span>الهدف النهائي:</span>
-                    <input type="number" id="targetGoal" value="10.00" step="0.25">
-                    <span>/20</span>
-                </div>
-                <button id="calcTargetBtn">احسب العلامة المطلوبة</button>
-                <div id="targetMsg" class="info-box">🎯 أدخل هدفك ثم اضغط حساب</div>
-            </div>
-            <div class="formula-note" style="text-align:center; margin-top:12px;">
-                ✨ Made By Nizar Mansouri
-            </div>
+        <div class="module">
+          <div class="module-title">البوتانيك <span class="coeff">معامل 2</span></div>
+          <div class="exam-row">
+            <div class="field"><label>EMD 1</label><input inputmode="decimal" id="bota1" placeholder=""></div>
+            <div class="field"><label>EMD 2</label><input inputmode="decimal" id="bota2" placeholder=""></div>
+            <div class="field"><label>TP</label><input inputmode="decimal" id="botaTp" placeholder=""></div>
+          </div>
+          <div class="formula-note">📐 0.8 × متوسط EMD + 0.2 × TP</div>
         </div>
+
+        <div class="module">
+          <div class="module-title">المينيرال <span class="coeff">معامل 2</span></div>
+          <div class="exam-row">
+            <div class="field"><label>EMD 1</label><input inputmode="decimal" id="min1" placeholder=""></div>
+            <div class="field"><label>EMD 2</label><input inputmode="decimal" id="min2" placeholder=""></div>
+            <div class="field"><label>TP</label><input inputmode="decimal" id="minTp" placeholder=""></div>
+          </div>
+          <div class="formula-note">📐 0.8 × متوسط EMD + 0.2 × TP</div>
+        </div>
+
+        <div class="module">
+          <div class="module-title">الجينيتيك <span class="coeff">معامل 2</span></div>
+          <div class="exam-row">
+            <div class="field"><label>امتحان 1</label><input inputmode="decimal" id="gen1" placeholder=""></div>
+            <div class="field"><label>امتحان 2</label><input inputmode="decimal" id="gen2" placeholder=""></div>
+          </div>
+          <div class="formula-note">📐 المعدل = (Exam1 + Exam2) / 2</div>
+        </div>
+
+        <div class="module">
+          <div class="module-title">البيوشيمي <span class="coeff">معامل 2</span></div>
+          <div class="exam-row">
+            <div class="field"><label>امتحان 1</label><input inputmode="decimal" id="bio1" placeholder=""></div>
+            <div class="field"><label>امتحان 2</label><input inputmode="decimal" id="bio2" placeholder=""></div>
+            <div class="field"><label>امتحان 3</label><input inputmode="decimal" id="bio3" placeholder=""></div>
+          </div>
+          <div class="formula-note">📐 المعدل = (Exam1 + Exam2 + Exam3) / 3</div>
+        </div>
+
+        <div class="module">
+          <div class="module-title">التحليلية (Analytique) <span class="coeff">معامل 2</span></div>
+          <div class="exam-row">
+            <div class="field"><label>EMD 1</label><input inputmode="decimal" id="ana1" placeholder=""></div>
+            <div class="field"><label>EMD 2</label><input inputmode="decimal" id="ana2" placeholder=""></div>
+            <div class="field"><label>TP</label><input inputmode="decimal" id="anaTp" placeholder=""></div>
+          </div>
+          <div class="formula-note">📐 0.8 × متوسط EMD + 0.2 × TP</div>
+        </div>
+
+        <div class="module">
+          <div class="module-title">الفيزيو باتولوجي <span class="coeff">معامل 2</span></div>
+          <div class="exam-row">
+            <div class="field"><label>امتحان 1</label><input inputmode="decimal" id="physio1" placeholder=""></div>
+            <div class="field"><label>امتحان 2</label><input inputmode="decimal" id="physio2" placeholder=""></div>
+          </div>
+          <div class="formula-note">📐 المعدل = (Exam1 + Exam2) / 2</div>
+        </div>
+
+        <div class="module">
+          <div class="module-title">البيوفيزيك <span class="coeff">معامل 2</span></div>
+          <div class="exam-row">
+            <div class="field"><label>امتحان 1</label><input inputmode="decimal" id="biof1" placeholder=""></div>
+            <div class="field"><label>امتحان 2</label><input inputmode="decimal" id="biof2" placeholder=""></div>
+          </div>
+          <div class="formula-note">📐 المعدل = (Exam1 + Exam2) / 2</div>
+        </div>
+
+        <button id="resetBtn" class="reset-btn" type="button">⟳ إعادة ضبط ومسح العلامات المحفوظة</button>
+      </div>
+
+      <div class="results-side">
+        <div class="avg-panel">
+          <div>📈 المعدل العام الحالي</div>
+          <div class="big-avg" id="currentAvgSpan">0.00 /20</div>
+          <div class="formula-note">الخانات الفارغة تُحسب 0 في المعدل الحالي، وتُعتبر متبقية في حساب الهدف.</div>
+          <button id="refreshAvg" type="button">تحديث المعدل</button>
+        </div>
+
+        <div class="target-panel">
+          <h3>🎯 شحال خاصك في الخانات المتبقية باش توصل للهدف؟</h3>
+          <div class="target-line">
+            <span>الهدف:</span>
+            <input inputmode="decimal" id="targetGoal" value="10.00">
+            <span>/20</span>
+          </div>
+          <button id="calcTargetBtn" type="button">احسب العلامة المطلوبة</button>
+          <div id="targetMsg" class="info-box">🎯 أدخل هدفك ثم اضغط حساب</div>
+        </div>
+
+        <div class="formula-note" style="text-align:center;margin-top:12px;font-weight:800;">✨ Made By Nizar Mansouri</div>
+      </div>
     </div>
+
     <footer>✨ Made By Nizar Mansouri</footer>
-</div>
+  </div>
 
-<script>
-    // Helper: جلب القيمة (إذا فارغة ترجع 0)
-    function getNumber(el) {
-        let val = el.value.trim();
-        if (val === "") return 0;
-        let num = parseFloat(val);
-        return isNaN(num) ? 0 : num;
+  <script>
+    const STORAGE_KEY = "pharmacy_calculator_v5";
+    const THEME_KEY = "pharmacy_calculator_theme";
+    const EPS = 0.000001;
+
+    const fields = [
+      { id:"angNote", name:"الإنجليزية", weight:1 },
+
+      { id:"bota1", name:"البوتانيك EMD 1", weight:0.8 },
+      { id:"bota2", name:"البوتانيك EMD 2", weight:0.8 },
+      { id:"botaTp", name:"البوتانيك TP", weight:0.4 },
+
+      { id:"min1", name:"المينيرال EMD 1", weight:0.8 },
+      { id:"min2", name:"المينيرال EMD 2", weight:0.8 },
+      { id:"minTp", name:"المينيرال TP", weight:0.4 },
+
+      { id:"gen1", name:"الجينيتيك امتحان 1", weight:1 },
+      { id:"gen2", name:"الجينيتيك امتحان 2", weight:1 },
+
+      { id:"bio1", name:"البيوشيمي امتحان 1", weight:2/3 },
+      { id:"bio2", name:"البيوشيمي امتحان 2", weight:2/3 },
+      { id:"bio3", name:"البيوشيمي امتحان 3", weight:2/3 },
+
+      { id:"ana1", name:"التحليلية EMD 1", weight:0.8 },
+      { id:"ana2", name:"التحليلية EMD 2", weight:0.8 },
+      { id:"anaTp", name:"التحليلية TP", weight:0.4 },
+
+      { id:"physio1", name:"الفيزيو باتولوجي امتحان 1", weight:1 },
+      { id:"physio2", name:"الفيزيو باتولوجي امتحان 2", weight:1 },
+
+      { id:"biof1", name:"البيوفيزيك امتحان 1", weight:1 },
+      { id:"biof2", name:"البيوفيزيك امتحان 2", weight:1 }
+    ];
+
+    function normalizeDigits(str){
+      const arabic = "٠١٢٣٤٥٦٧٨٩";
+      const persian = "۰۱۲۳۴۵۶۷۸۹";
+      return String(str || "")
+        .replace(/[٠-٩]/g, d => arabic.indexOf(d))
+        .replace(/[۰-۹]/g, d => persian.indexOf(d))
+        .replace(/[،,]/g, ".")
+        .replace(/[^0-9.\-]/g, "");
     }
 
-    // احتساب علامة البوتانيك
-    function getBotanique() {
-        let e1 = getNumber(document.getElementById('bota1'));
-        let e2 = getNumber(document.getElementById('bota2'));
-        let tp = getNumber(document.getElementById('botaTp'));
-        let moyEmd = (e1 + e2) / 2;
-        return 0.8 * moyEmd + 0.2 * tp;
+    function rawValue(id){
+      const el = document.getElementById(id);
+      return el ? el.value.trim() : "";
     }
 
-    function getMineral() {
-        let e1 = getNumber(document.getElementById('min1'));
-        let e2 = getNumber(document.getElementById('min2'));
-        let tp = getNumber(document.getElementById('minTp'));
-        let moyEmd = (e1 + e2) / 2;
-        return 0.8 * moyEmd + 0.2 * tp;
+    function parseVal(id){
+      const raw = normalizeDigits(rawValue(id));
+      if(raw === "" || raw === "." || raw === "-" || raw === "-.") return 0;
+      const num = Number(raw);
+      if(!Number.isFinite(num)) return 0;
+      return num;
     }
 
-    function getGenetique() {
-        let ex1 = getNumber(document.getElementById('gen1'));
-        let ex2 = getNumber(document.getElementById('gen2'));
-        return (ex1 + ex2) / 2;
+    function isEmptyField(id){
+      return rawValue(id) === "";
     }
 
-    function getBiochimie() {
-        let ex1 = getNumber(document.getElementById('bio1'));
-        let ex2 = getNumber(document.getElementById('bio2'));
-        let ex3 = getNumber(document.getElementById('bio3'));
-        return (ex1 + ex2 + ex3) / 3;
+    function totalWeight(){
+      return fields.reduce((sum, f) => sum + f.weight, 0); // 15
     }
 
-    function getAnalytique() {
-        let e1 = getNumber(document.getElementById('ana1'));
-        let e2 = getNumber(document.getElementById('ana2'));
-        let tp = getNumber(document.getElementById('anaTp'));
-        let moyEmd = (e1 + e2) / 2;
-        return 0.8 * moyEmd + 0.2 * tp;
+    function currentWeighted(){
+      return fields.reduce((sum, f) => sum + parseVal(f.id) * f.weight, 0);
     }
 
-    function getPhysio() {
-        let ex1 = getNumber(document.getElementById('physio1'));
-        let ex2 = getNumber(document.getElementById('physio2'));
-        return (ex1 + ex2) / 2;
+    function computeCurrentOverall(){
+      return currentWeighted() / totalWeight();
     }
 
-    function getBiophysique() {
-        let ex1 = getNumber(document.getElementById('biof1'));
-        let ex2 = getNumber(document.getElementById('biof2'));
-        return (ex1 + ex2) / 2;
+    function updateCurrentDisplay(){
+      const avg = computeCurrentOverall();
+      document.getElementById("currentAvgSpan").innerText = avg.toFixed(2) + " /20";
     }
 
-    // الحصول على جميع المواد مع معاملاتها وعلاماتها
-    function getAllSubjects() {
-        let anglais = getNumber(document.getElementById('angNote'));
-        let botanique = getBotanique();
-        let mineral = getMineral();
-        let genetique = getGenetique();
-        let biochimie = getBiochimie();
-        let analytique = getAnalytique();
-        let physio = getPhysio();
-        let biophysique = getBiophysique();
-
-        return [
-            { note: anglais, coeff: 1, name: "الإنجليزية" },
-            { note: botanique, coeff: 2, name: "البوتانيك" },
-            { note: mineral, coeff: 2, name: "المينيرال" },
-            { note: genetique, coeff: 2, name: "الجينيتيك" },
-            { note: biochimie, coeff: 2, name: "البيوشيمي" },
-            { note: analytique, coeff: 2, name: "التحليلية" },
-            { note: physio, coeff: 2, name: "الفيزيو باتولوجي" },
-            { note: biophysique, coeff: 2, name: "البيوفيزيك" }
-        ];
+    function saveData(){
+      const data = {};
+      fields.forEach(f => data[f.id] = rawValue(f.id));
+      data.targetGoal = rawValue("targetGoal");
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     }
 
-// حفظ البيانات محلياً
-const STORAGE_KEY='pharma_calc_data_v1';
-function saveData(){
- const data={};
- document.querySelectorAll('input').forEach(inp=>data[inp.id]=inp.value);
- data.theme=document.body.classList.contains('dark')?'dark':'light';
- localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-}
-function loadData(){
- const raw=localStorage.getItem(STORAGE_KEY);
- if(!raw) return;
- try{
-   const data=JSON.parse(raw);
-   Object.keys(data).forEach(k=>{
-     const el=document.getElementById(k);
-     if(el) el.value=data[k];
-   });
-   if(data.theme==='dark') document.body.classList.add('dark');
- }catch(e){}
-}
-
-    function updateCurrentDisplay() {
-        let avg = computeCurrentOverall();
-        document.getElementById('currentAvgSpan').innerText = avg.toFixed(2) + " /20";
+    function loadData(){
+      try{
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+        fields.forEach(f => {
+          if(Object.prototype.hasOwnProperty.call(saved, f.id)){
+            document.getElementById(f.id).value = saved[f.id];
+          }
+        });
+        if(saved.targetGoal !== undefined) document.getElementById("targetGoal").value = saved.targetGoal;
+      }catch(e){
+        console.warn("Could not load saved marks", e);
+      }
     }
 
-    // حساب الهدف بذكاء حسب الخانات الفارغة ووزن كل خانة في المعدل العام
-    const TOTAL_COEFF = 15;
-    const EPSILON = 0.005;
+    function applyTheme(theme){
+      const dark = theme === "dark";
+      document.body.classList.toggle("dark", dark);
+      document.getElementById("themeBtn").innerText = dark ? "☀️ الوضع الأبيض" : "🌙 الوضع الأسود";
+      localStorage.setItem(THEME_KEY, dark ? "dark" : "light");
+    }
 
-    function isBlank(id) {
+    function loadTheme(){
+      const savedTheme = localStorage.getItem(THEME_KEY) || "light";
+      applyTheme(savedTheme);
+    }
+
+    function neededForTarget(){
+      const target = Number(normalizeDigits(rawValue("targetGoal")));
+      if(!Number.isFinite(target) || target < 0 || target > 20){
+        return "⚠️ الهدف لازم يكون بين 0 و 20.";
+      }
+
+      const total = totalWeight();
+      const current = currentWeighted();
+      const avg = current / total;
+      const requiredTotal = target * total;
+      const missing = fields.filter(f => isEmptyField(f.id));
+      const missingWeight = missing.reduce((sum, f) => sum + f.weight, 0);
+      const neededPoints = requiredTotal - current;
+
+      if(neededPoints <= EPS){
+        return `✅ راك وصلت للهدف بالفعل. معدلك الحالي هو <strong>${avg.toFixed(2)}/20</strong> والهدف هو <strong>${target.toFixed(2)}/20</strong>.`;
+      }
+
+      if(missingWeight <= EPS){
+        return `❌ ما بقات حتى خانة فارغة. معدلك الحالي <strong>${avg.toFixed(2)}/20</strong> وما يقدرش يوصل إلى <strong>${target.toFixed(2)}/20</strong> بدون علامات إضافية.`;
+      }
+
+      const neededEach = neededPoints / missingWeight;
+
+      if(neededEach > 20 + 0.01){
+        return `⚠️ صعيبة/مستحيلة رياضيًا: لازمك تقريبًا <strong>${neededEach.toFixed(2)}/20</strong> في كل خانة متبقية، وهذا يفوق 20.`;
+      }
+
+      if(neededEach < 0){
+        return `✅ حتى لو بقيت الخانات الفارغة على 0، هدف <strong>${target.toFixed(2)}/20</strong> متحقق بالفعل.`;
+      }
+
+      return `📌 باش توصل إلى <strong>${target.toFixed(2)}/20</strong>، خاصك تقريبًا <strong>${neededEach.toFixed(2)}/20</strong> في كل خانة فارغة متبقية.`;
+    }
+
+    function showTarget(){
+      document.getElementById("targetMsg").innerHTML = neededForTarget();
+      updateCurrentDisplay();
+      saveData();
+    }
+
+    function resetAll(){
+      fields.forEach(f => document.getElementById(f.id).value = "");
+      document.getElementById("targetGoal").value = "10.00";
+      localStorage.removeItem(STORAGE_KEY);
+      updateCurrentDisplay();
+      document.getElementById("targetMsg").innerHTML = "✨ تم مسح العلامات المحفوظة.";
+    }
+
+    function init(){
+      loadTheme();
+      loadData();
+      updateCurrentDisplay();
+
+      document.getElementById("themeBtn").addEventListener("click", () => {
+        applyTheme(document.body.classList.contains("dark") ? "light" : "dark");
+      });
+
+      document.getElementById("refreshAvg").addEventListener("click", () => {
+        updateCurrentDisplay();
+        saveData();
+      });
+
+      document.getElementById("calcTargetBtn").addEventListener("click", showTarget);
+      document.getElementById("resetBtn").addEventListener("click", resetAll);
+
+      [...fields.map(f => f.id), "targetGoal"].forEach(id => {
         const el = document.getElementById(id);
-        return !el || el.value.trim() === "";
+        el.addEventListener("input", () => {
+          updateCurrentDisplay();
+          saveData();
+        });
+      });
     }
 
-    function getWeightedFields() {
-        return [
-            { id: 'angNote', name: 'الإنجليزية', weight: 1 },
-
-            { id: 'bota1', name: 'البوتانيك EMD 1', weight: 0.8 },
-            { id: 'bota2', name: 'البوتانيك EMD 2', weight: 0.8 },
-            { id: 'botaTp', name: 'البوتانيك TP', weight: 0.4 },
-
-            { id: 'min1', name: 'المينيرال EMD 1', weight: 0.8 },
-            { id: 'min2', name: 'المينيرال EMD 2', weight: 0.8 },
-            { id: 'minTp', name: 'المينيرال TP', weight: 0.4 },
-
-            { id: 'gen1', name: 'الجينيتيك امتحان 1', weight: 1 },
-            { id: 'gen2', name: 'الجينيتيك امتحان 2', weight: 1 },
-
-            { id: 'bio1', name: 'البيوشيمي امتحان 1', weight: 2 / 3 },
-            { id: 'bio2', name: 'البيوشيمي امتحان 2', weight: 2 / 3 },
-            { id: 'bio3', name: 'البيوشيمي امتحان 3', weight: 2 / 3 },
-
-            { id: 'ana1', name: 'التحليلية EMD 1', weight: 0.8 },
-            { id: 'ana2', name: 'التحليلية EMD 2', weight: 0.8 },
-            { id: 'anaTp', name: 'التحليلية TP', weight: 0.4 },
-
-            { id: 'physio1', name: 'الفيزيو باتولوجي امتحان 1', weight: 1 },
-            { id: 'physio2', name: 'الفيزيو باتولوجي امتحان 2', weight: 1 },
-
-            { id: 'biof1', name: 'البيوفيزيك امتحان 1', weight: 1 },
-            { id: 'biof2', name: 'البيوفيزيك امتحان 2', weight: 1 }
-        ];
-    }
-
-    function computeWeightedFromFields() {
-        let total = 0;
-        for (const f of getWeightedFields()) {
-            total += getNumber(document.getElementById(f.id)) * f.weight;
-        }
-        return total;
-    }
-
-    function computeCurrentOverall() {
-        return computeWeightedFromFields() / TOTAL_COEFF;
-    }
-
-    function neededForTarget(targetValue) {
-        if (isNaN(targetValue) || targetValue < 0 || targetValue > 20) {
-            return { error: true, msg: "الهدف يجب أن يكون بين 0 و 20." };
-        }
-
-        const currentWeighted = computeWeightedFromFields();
-        const currentAvg = currentWeighted / TOTAL_COEFF;
-        const requiredWeighted = targetValue * TOTAL_COEFF;
-        const deficit = requiredWeighted - currentWeighted;
-        const remainingFields = getWeightedFields().filter(f => isBlank(f.id));
-        const remainingWeight = remainingFields.reduce((acc, f) => acc + f.weight, 0);
-
-        if (deficit <= EPSILON) {
-            return { success: true, needed: 0, msg: `✅ راك واصل الهدف. معدلك الحالي ${currentAvg.toFixed(2)} والهدف ${targetValue.toFixed(2)}.` };
-        }
-
-        if (remainingWeight <= EPSILON) {
-            return { success: false, needed: null, msg: `❌ كل الخانات معمّرة، ومعدلك ${currentAvg.toFixed(2)} أقل من الهدف ${targetValue.toFixed(2)}. ما بقات حتى خانة باش ترفعو.` };
-        }
-
-        const neededAvg = deficit / remainingWeight;
-
-        if (neededAvg > 20 + EPSILON) {
-            return { success: false, needed: neededAvg, msg: `⚠️ غير ممكن: لازمك تقريبًا ${neededAvg.toFixed(2)}/20 في كل خانة متبقية للوصول إلى ${targetValue.toFixed(2)}.` };
-        }
-
-        if (neededAvg < 0) {
-            return { success: true, needed: 0, msg: `🎉 الهدف ${targetValue.toFixed(2)} متحقق بالفعل.` };
-        }
-
-        return { success: true, needed: neededAvg, msg: `📌 لازمك تقريبًا <strong>${neededAvg.toFixed(2)}/20</strong> في كل خانة متبقية باش توصل لهدف ${targetValue.toFixed(2)}.` };
-    }
-
-    function showTarget() {
-        let goal = parseFloat(document.getElementById('targetGoal').value);
-        let result = neededForTarget(goal);
-        if (result.error) {
-            document.getElementById('targetMsg').innerHTML = result.msg;
-        } else {
-            document.getElementById('targetMsg').innerHTML = result.msg;
-        }
-        updateCurrentDisplay();
-    }
-
-    function resetAll() {
-        let allNumberInputs = document.querySelectorAll('input[type="number"]');
-        allNumberInputs.forEach(inp => { if (inp.id === "targetGoal") inp.value = "10.00"; else inp.value = ""; });
-        updateCurrentDisplay();
-        localStorage.removeItem(STORAGE_KEY); document.getElementById("targetMsg").innerHTML = "✨ تم مسح العلامات المحفوظة.";
-    }
-
-    // ربط الأحداث
-    document.getElementById('refreshAvg').addEventListener('click', updateCurrentDisplay);
-    document.getElementById('calcTargetBtn').addEventListener('click', showTarget);
-    document.getElementById('resetBtn').addEventListener('click', resetAll);
-    let allInputs = document.querySelectorAll('input');
-    loadData();
-    allInputs.forEach(inp => inp.addEventListener('input', ()=>{updateCurrentDisplay(); saveData();}));
-    document.getElementById('themeToggle').addEventListener('click', ()=>{document.body.classList.toggle('dark'); saveData();});
-    updateCurrentDisplay();
-</script>
+    init();
+  </script>
 </body>
 </html>
