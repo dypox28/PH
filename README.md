@@ -1,2 +1,1 @@
-# PH
-Calculator for 2nd Pharma 
+شوية و ارجع راه صيانة الموقع 
