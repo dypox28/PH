@@ -6,10 +6,44 @@
     <title>حاسبة المعدل - صيدلة سنة ثانية</title>
     <style>
         :root{
-            --bg1:#cddfe8; --bg2:#b8cee0; --card:#ffffffef; --header:#1e4a6e; --text:#111; --panel:#f7fafd; --module:#fff;
+            --bg1:#cddfe8;
+            --bg2:#b8cee0;
+            --card:#ffffffef;
+            --header:#1e4a6e;
+            --text:#102030;
+            --muted:#5f7369;
+            --panel:#f7fafd;
+            --module:#ffffff;
+            --border:#dce5ec;
+            --input:#ffffff;
+            --input-text:#102030;
+            --pill:#eef2f7;
+            --accent:#2c7f6b;
+            --accent-dark:#1e5f4f;
+            --target:#eef3f0;
+            --info:#fff4e0;
+            --info-border:#e9b13b;
+            --footer:#e2edf0;
         }
         body.dark{
-            --bg1:#111827; --bg2:#1f2937; --card:#1e293be8; --header:#0f172a; --text:#f8fafc; --panel:#111827; --module:#1f2937;
+            --bg1:#07111f;
+            --bg2:#111827;
+            --card:#0f172af2;
+            --header:#07111f;
+            --text:#f8fafc;
+            --muted:#cbd5e1;
+            --panel:#111827;
+            --module:#1e293b;
+            --border:#334155;
+            --input:#0f172a;
+            --input-text:#f8fafc;
+            --pill:#334155;
+            --accent:#34d399;
+            --accent-dark:#10b981;
+            --target:#172033;
+            --info:#1f2937;
+            --info-border:#f59e0b;
+            --footer:#0f172a;
         }
         * {
             margin: 0;
@@ -52,7 +86,7 @@
             flex: 2;
             padding: 1.6rem;
             background: var(--module);
-            border-left: 1px solid #dce5ec;
+            border-left: 1px solid var(--border);
         }
         .results-side {
             flex: 1.2;
@@ -60,8 +94,8 @@
             background: var(--panel);
         }
         .module {
-            background: #fff;
-            border: 1px solid #e2edf5;
+            background: var(--module);
+            border: 1px solid var(--border);
             border-radius: 1.2rem;
             margin-bottom: 1.2rem;
             padding: 0.8rem 1rem;
@@ -71,14 +105,14 @@
             font-weight: 700;
             font-size: 1rem;
             margin-bottom: 10px;
-            border-right: 5px solid #2a7f6e;
+            border-right: 5px solid var(--accent);
             padding-right: 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
         .coeff {
-            background: #eef2f7;
+            background: var(--pill);
             padding: 2px 12px;
             border-radius: 20px;
             font-size: 0.7rem;
@@ -97,29 +131,31 @@
         .field label {
             font-size: 0.7rem;
             font-weight: 600;
-            color: #2c5a4a;
+            color: var(--accent-dark);
             display: block;
         }
         .field input {
             width: 100%;
             padding: 8px 6px;
             border-radius: 14px;
-            border: 1px solid #cbdbe2;
+            border: 1px solid var(--border);
+            background: var(--input);
+            color: var(--input-text);
             text-align: center;
             font-size: 0.85rem;
         }
         .field input:focus {
             outline: none;
-            border-color: #2c7f6b;
+            border-color: var(--accent);
             box-shadow: 0 0 0 2px rgba(44,127,107,0.2);
         }
         .formula-note {
             font-size: 0.65rem;
-            color: #5f7369;
+            color: var(--muted);
             margin-top: 6px;
         }
         .avg-panel {
-            background: white;
+            background: var(--module);
             border-radius: 1.2rem;
             padding: 1.2rem;
             text-align: center;
@@ -129,11 +165,11 @@
         .big-avg {
             font-size: 3rem;
             font-weight: 800;
-            color: #1e5a4a;
+            color: var(--accent-dark);
             line-height: 1;
         }
         .target-panel {
-            background: #eef3f0;
+            background: var(--target);
             border-radius: 1.2rem;
             padding: 1.2rem;
         }
@@ -153,12 +189,14 @@
             width: 90px;
             padding: 8px;
             border-radius: 40px;
-            border: 1px solid #bcc9bc;
+            border: 1px solid var(--border);
+            background: var(--input);
+            color: var(--input-text);
             text-align: center;
             font-weight: bold;
         }
         button {
-            background: #2c7f6b;
+            background: var(--accent);
             border: none;
             padding: 8px 18px;
             border-radius: 40px;
@@ -170,12 +208,12 @@
             transition: 0.2s;
         }
         button:hover {
-            background: #1e5f4f;
+            background: var(--accent-dark);
             transform: scale(0.97);
         }
         .info-box {
-            background: #fff4e0;
-            border-right: 4px solid #e9b13b;
+            background: var(--info);
+            border-right: 4px solid var(--info-border);
             padding: 10px;
             border-radius: 18px;
             margin-top: 15px;
@@ -195,16 +233,30 @@
         }
         footer {
             text-align: center;
-            background: #e2edf0;
-            padding: 10px;
-            font-size: 0.7rem;
-            color: #2b4e40;
+            background: var(--footer);
+            padding: 12px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+        .theme-btn{
+            float:left;
+            width:auto;
+            padding:8px 14px;
+            background:rgba(255,255,255,.95);
+            color:#111827;
+            border-radius:40px;
+            margin-top:0;
+        }
+        body.dark .theme-btn{
+            background:#334155;
+            color:#f8fafc;
         }
     </style>
 </head>
 <body>
 <div class="card">
-    <div class="header"><button id="themeToggle" style="float:left;width:auto;padding:8px 14px;background:#fff;color:#111;">🌓 الوضع</button>
+    <div class="header"><button id="themeToggle" class="theme-btn">🌓 الوضع</button>
         <h1>📊 حاسبة المعدل – السنة الثانية صيدلة</h1>
         <p>معامل 2 لكل المواد ما عدا الإنجليزية معاملها 1. الحقول الفارغة = 0 (تدخل في المعدل). كل مادة حسب عدد امتحاناتها.</p>
     </div>
@@ -260,14 +312,15 @@
                 <div class="formula-note">المعدل = (Exam1+Exam2+Exam3)/3</div>
             </div>
 
-            <!-- التحليلية (امتحانين) -->
+            <!-- التحليلية: زوج EMD + TP -->
             <div class="module">
-                <div class="module-title">التحليلية (Analytique) <span class="coeff">معامل 2 (امتحانين)</span></div>
+                <div class="module-title">التحليلية (Analytique) <span class="coeff">معامل 2</span></div>
                 <div class="exam-row">
-                    <div class="field"><label>امتحان 1</label><input type="number" step="any" id="ana1" placeholder="0"></div>
-                    <div class="field"><label>امتحان 2</label><input type="number" step="any" id="ana2" placeholder="0"></div>
+                    <div class="field"><label>EMD 1</label><input type="number" step="any" id="ana1" placeholder="0"></div>
+                    <div class="field"><label>EMD 2</label><input type="number" step="any" id="ana2" placeholder="0"></div>
+                    <div class="field"><label>TP</label><input type="number" step="any" id="anaTp" placeholder="0"></div>
                 </div>
-                <div class="formula-note">المعدل = (Exam1+Exam2)/2</div>
+                <div class="formula-note">📐 0.8×(متوسط EMD1+EMD2) + 0.2×TP</div>
             </div>
 
             <!-- الفيزيو باتولوجي (امتحانين) -->
@@ -312,11 +365,11 @@
                 <div id="targetMsg" class="info-box">🎯 أدخل هدفك ثم اضغط حساب</div>
             </div>
             <div class="formula-note" style="text-align:center; margin-top:12px;">
-                ⚡ @ SUI-team AI GEN 
+                ✨ Made By Nizar Mansouri
             </div>
         </div>
     </div>
-    <footer>الحقل الفارغ = 0. جميع المواد تدخل في المعدل. المعاملات: الإنجليزية=1، الباقي=2.<br>✨ Made By Nizar Mansouri</footer>
+    <footer>✨ Made By Nizar Mansouri</footer>
 </div>
 
 <script>
@@ -359,9 +412,11 @@
     }
 
     function getAnalytique() {
-        let ex1 = getNumber(document.getElementById('ana1'));
-        let ex2 = getNumber(document.getElementById('ana2'));
-        return (ex1 + ex2) / 2;
+        let e1 = getNumber(document.getElementById('ana1'));
+        let e2 = getNumber(document.getElementById('ana2'));
+        let tp = getNumber(document.getElementById('anaTp'));
+        let moyEmd = (e1 + e2) / 2;
+        return 0.8 * moyEmd + 0.2 * tp;
     }
 
     function getPhysio() {
@@ -453,8 +508,9 @@ function loadData(){
             { id: 'bio2', name: 'البيوشيمي امتحان 2', weight: 2 / 3 },
             { id: 'bio3', name: 'البيوشيمي امتحان 3', weight: 2 / 3 },
 
-            { id: 'ana1', name: 'التحليلية امتحان 1', weight: 1 },
-            { id: 'ana2', name: 'التحليلية امتحان 2', weight: 1 },
+            { id: 'ana1', name: 'التحليلية EMD 1', weight: 0.8 },
+            { id: 'ana2', name: 'التحليلية EMD 2', weight: 0.8 },
+            { id: 'anaTp', name: 'التحليلية TP', weight: 0.4 },
 
             { id: 'physio1', name: 'الفيزيو باتولوجي امتحان 1', weight: 1 },
             { id: 'physio2', name: 'الفيزيو باتولوجي امتحان 2', weight: 1 },
@@ -506,7 +562,7 @@ function loadData(){
             return { success: true, needed: 0, msg: `🎉 الهدف ${targetValue.toFixed(2)} متحقق بالفعل.` };
         }
 
-        return { success: true, needed: neededAvg, msg: `📌 لازمك تقريبًا <strong>${neededAvg.toFixed(2)}/20</strong> في كل خانة فارغة باش توصل لهدف ${targetValue.toFixed(2)}.` };
+        return { success: true, needed: neededAvg, msg: `📌 لازمك تقريبًا <strong>${neededAvg.toFixed(2)}/20</strong> في كل خانة متبقية باش توصل لهدف ${targetValue.toFixed(2)}.` };
     }
 
     function showTarget() {
