@@ -369,7 +369,7 @@
     function applyTheme(theme){
       const dark = theme === "dark";
       document.body.classList.toggle("dark", dark);
-      document.getElementById("themeBtn").innerText = dark ? "☀️ الوضع الأبيض" : "🌙 الوضع الأسود";
+      document.getElementById("themeBtn").innerText = dark ? "☀️ white Mode" : "🌙 Dark mode ";
       localStorage.setItem(THEME_KEY, dark ? "dark" : "light");
     }
 
